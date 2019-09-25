@@ -41,27 +41,13 @@ class geTrackerScraper(object):
 
     def extract_item_current_price(self):
         item_current_price = self.driver.find_elements_by_id("item_stat_overall")
-        #print("Current item price: ", end='')
-        #print(item_sell_price[0].text)
-
         return item_current_price[0].text
     def extract_item_min_price(self):
         item_buy_price = self.driver.find_elements_by_id("item_stat_sell_price")
-        #print("Item buy price: ", end='')
-        #print(item_buy_price[0].text)
-
         return item_buy_price[0].text
     def extract_item_max_price(self):
         item_sell_price = self.driver.find_elements_by_id("item_stat_offer_price")
-        #print("Item sell price: ", end='')
-        #print(item_sell_price[0].text)
-
         return item_sell_price[0].text
-
-    # def test(self):
-    #     print("URL for item: ", end='')
-    #     print(osrs_item)
-    #     print(self.url)
 
 #create file (workbook) and worksheet
 outWorkbook = xlsxwriter.Workbook("osrsItems.xlsx")
@@ -78,49 +64,27 @@ buyPrices = []
 sellPrices = []
 #margins = []
 
-#scraper.test()
 
-for i in range(len(osrs_items)):
-    scraper = geTrackerScraper(osrs_items[i])
-    scraper.loadGETrackerURL()
-    currentPrices.append(scraper.extract_item_current_price())
-    buyPrices.append(scraper.extract_item_min_price())
-    sellPrices.append(scraper.extract_item_max_price())
+for i, item in enumerate(osrs_items):
+        scraper = geTrackerScraper(osrs_items[i])
+        scraper.loadGETrackerURL()
+        currentPrices.append(scraper.extract_item_current_price())
+        buyPrices.append(scraper.extract_item_min_price())
+        sellPrices.append(scraper.extract_item_max_price())
 
-
-outSheet.write("A1", "Item")
-outSheet.write("B1", "Current Price")
-outSheet.write("C1", "Buy Price")
-outSheet.write("D1", "Sell Price")
-outSheet.write("E1", "Margin")
-
-for j in range(len(osrs_items)):
+for j, item in enumerate(osrs_items):
     for k in range(3):
-        #write(row, column, data)
-        outSheet.write(j+1, 0, osrs_items[j])
-        outSheet.write(j+1, k+1, currentPrices[j])
-        outSheet.write(j+1, k+1, buyPrices[j])
-        outSheet.write(j+1, k+1, sellPrices[j])
-        #outSheet.write(j+1, k+1, (sellPrices[j] - buyPrices[j]))
-
-
-
+            outSheet.write(0, 0, "Item")
+            outSheet.write(0, 1, "Current Price")
+            outSheet.write(0, 2, "Buy Price")
+            outSheet.write(0, 3, "Sell Price")
+            #i might just be dumb/unfamiliar with python but can't figure out
+            #a nicer way to print to the excel sheet. This for loop feels... odd
+            
+            #write(row, column, data)
+            outSheet.write(j+1, 0, item)
+            outSheet.write(j+1, k+1, currentPrices[j])
+            outSheet.write(j+1, k+1, buyPrices[j])
+            outSheet.write(j+1, k+1, sellPrices[j])
 
 outWorkbook.close()
-
-
-# content = driver.page_source
-# soup = BeautifulSoup(content)
-# for a in soup.findAll('a',href=True, attrs={'class':'_31qSD5'}):
-# name=a.find('div', attrs={'class':'_3wU53n'})
-# price=a.find('div', attrs={'class':'_1vC4OE _2rQ-NK'})
-# rating=a.find('div', attrs={'class':'hGSR34 _2beYZw'})
-# products.append(name.text)
-# prices.append(price.text)
-# ratings.append(rating.text) 
-
-
-
-
-
-
